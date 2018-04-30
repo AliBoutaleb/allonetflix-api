@@ -11,4 +11,11 @@ module.exports = (server) => {
         server.middlewares.ensureBodyFields(['email', 'password']),
         server.controllers.authentication.login
     );
+
+    server.post('/addMember',
+        server.middlewares.bodyParser.json(),
+        server.middlewares.ensureBodyFields(['lastname','firstname','email',
+            'pseudonyme','password','birthdate','country','gender']),
+        server.controllers.member.add
+    );
 };

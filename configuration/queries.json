@@ -1,4 +1,5 @@
 {
-  "getUserFromEmailAndPassword" : "SELECT * FROM Member WHERE email=$1 and password=$2"
+  "getUserFromEmailAndPassword" : "SELECT * FROM Member WHERE email=$1 and password=$2;",
+  "addMember" : "INSERT INTO Member VALUES (nextval('id_member'), $1, $2, $3, $4, $5, $6, $7, $8, $9, $10);"
 }
 

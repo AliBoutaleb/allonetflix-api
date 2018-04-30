@@ -1,0 +1,2 @@
+INSERT into member (id, lastname, firstname, email, pseudonyme, password, birthdate, country, registerdate, lastupdatedate, gender)
+values (nextval('id_member'),'Boutaleb','Ali','ali.boutaleb.dev@outlook.fr','keffieh23','aaaaa','23/03/1993','FRANCE','26/04/2018','26/04/2018','Male');

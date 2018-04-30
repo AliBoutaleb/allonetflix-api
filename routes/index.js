@@ -1,8 +1,15 @@
 module.exports = (server) => {
-    server.use('/authentication', require('./authentications')(server));
-};
 
-server.get('/', function(req, res) {
-    res.setHeader('Content-Type', 'text/plain');
-    res.send('Vous êtes à l\'accueil');
-});
+    // Hello world
+    server.get('/', function(req, res) {
+        res.send('Hello world !');
+    });
+
+    // Authentication
+    server.post('/login',
+        server.middlewares.bodyParser.json(),
+        server.middlewares.ensureBodyFields(['email', 'password']),
+        server.controllers.authentication.login
+    );
+
+};

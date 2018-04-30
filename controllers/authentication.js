@@ -1,53 +1,49 @@
 const sha1 = require('sha1');
 const jwt = require('jsonwebtoken');
 
+const { Client } = require('pg')
+
+const client = new Client({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'allonetflix',
+    password: 'postgres',
+    port: 5432,
+})
+
 module.exports = (server) => {
-    const User = server.models.User;
 
-    return {
-        login,
-        getUserByEmail
-    };
+        function login (req, res){
+            const email = req.body.email;
+            const password = req.body.password;
 
-    function login(req, res, next) {
-        const email = req.body.email;
-        const password = sha1(req.body.password);
+            //
+            const query = {
+                text: 'SELECT * FROM Member WHERE email=$1 and password=$2',
+                values: [email, password]
+            }
 
-        findUser()
-            .then(ensureOne)
-            .then(createToken)
-            .then(send)
-            .catch(err => res.status(err.code || 500).send(err.reason || err));
-
-
-        function findUser() {
-            return User.findOne()
-                .select('+password')
-                .where({email: email, password: password})
-                .exec()
-        }
-
-        function ensureOne(user) {
-            return user ? user : Promise.reject({code: 404, reason: 'user.not.found'})
-        }
-
-        function createToken(user) {
-            const token = {
-                userId: user._id.toString()
-            };
-
-            return new Promise((resolve, reject) => {
-                jwt.sign(token, server.config.salt, {expiresIn: 60 * 60}, (err, encryptedToken) => {
-                    if (err)
-                        return reject(err);
-
-                    resolve(encryptedToken);
+            client.connect(err => {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                client.query(query, (err, data) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        const member = data.rows[0];
+                        console.log(member);
+                        if(member == undefined){
+                            console.log("Les identifiants sont incorrect");
+                        }else{
+                            console.log("Vous êtes authentifié !");
+                        }
+                    }
+                    client.end();
                 });
             });
+            res.send("end");
         }
-
-        function send(encryptedToken) {
-            res.send(encryptedToken);
-        }
-    }
+        return{login};
 };

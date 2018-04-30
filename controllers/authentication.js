@@ -2,7 +2,6 @@ const sha1 = require('sha1');
 const jwt = require('jsonwebtoken');
 const { Client } = require('pg')
 
-
 module.exports = (server) => {
 
         // Login from Email and Password
@@ -19,16 +18,25 @@ module.exports = (server) => {
                 if (q_err) {
                     console.log(q_err.stack)
                 } else {
+                    // Get member
                     const member = q_res.rows[0];
                     if(member == undefined){
-                        res.send("Identifiants incorrect")
-                    }else {
-                        res.send(q_res.rows[0])
+                        res.send("Identifiants incorrect !")
+                    }else{
+                        // Create and send jwt token
+                        jwt.sign({id:member.id}, server.configuration.salt, {expiresIn: 60 * 60}, (err, encryptedToken) =>{
+                            if(err){
+                                res.send(err)
+                            }
+                            res.send(encryptedToken)
+                        });
                     }
                 }
                 // Close connection
                 client.end()
             })
         }
+
+        // Return functions
         return{login};
 };

@@ -11,5 +11,4 @@ module.exports = (server) => {
         server.middlewares.ensureBodyFields(['email', 'password']),
         server.controllers.authentication.login
     );
-
 };

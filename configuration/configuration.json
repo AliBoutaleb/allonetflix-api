@@ -1,11 +1,14 @@
 {
   "name" : "Allo Netflix - API",
   "port" : "8081",
+
   "database":{
-    "user": "postgres",
-    "host": "localhost",
-    "database": "allonetflix",
-    "password": "postgres",
-    "port": 5432
-  }
+    "user" : "postgres",
+    "host" : "localhost",
+    "database" : "allonetflix",
+    "password" : "postgres",
+    "port" : 5432
+  },
+
+  "salt" : "25zqsfmjvbq$v2"
 }
